@@ -1,0 +1,138 @@
+<html>
+	
+	 <body>
+    <canvas id="canvas" width="300" height="300"> </canvas>
+    </body>
+
+    <script id="plain-bitmap-f" type="shader/fragment">
+    	precision mediump float;
+    	uniform sampler2D data;
+    	varying vec2 pos;
+    	void main() {
+    		float c = texture2D(data, (pos+1.0)/2.0 ).a;// + texture2D(data, pos).r + texture2D(data, pos).g + texture2D(data, pos).b;
+    		gl_FragColor = vec4(0.2, 0, c, 1);
+    		//gl_FragColor.rgb = vec3(0.0, 1.0, 0.0);
+		}
+    </script>
+
+    <script id="plain-bitmap-v" type="shader/vertex">
+    	precision mediump float;
+		attribute vec2 a_position;
+ 		varying vec2 pos;
+		void main() {
+		  gl_Position = vec4(a_position, 0, 1);
+		  pos = a_position;//*500.0 + vec2(500.0);
+		}
+    </script>
+
+    <script>
+
+    // Get A WebGL context
+    var canvas = document.getElementById("canvas");
+    var gl = canvas.getContext("webgl");
+     
+    // setup a GLSL program
+
+
+    var fshader = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(fshader, document.getElementById("plain-bitmap-f").text)
+    gl.compileShader(fshader)
+
+    
+    var vshader = gl.createShader(gl.VERTEX_SHADER);
+    gl.shaderSource(vshader, document.getElementById("plain-bitmap-v").text)
+    gl.compileShader(vshader)
+
+    
+    if (!gl.getShaderParameter(vshader, gl.COMPILE_STATUS)) {
+    	alert("vertex: \n"+gl.getShaderInfoLog(vshader))
+    }
+    if (!gl.getShaderParameter(fshader, gl.COMPILE_STATUS))
+    {
+ 	   alert("fragment: \n"+gl.getShaderInfoLog(fshader))
+	}
+
+    var prog = gl.createProgram();
+    gl.attachShader(prog, vshader)
+    gl.attachShader(prog, fshader)
+    gl.linkProgram(prog)
+
+    gl.useProgram(prog)
+
+    // look up where the vertex data needs to go.
+    var positionLocation = gl.getAttribLocation(prog, "a_position");
+    var datapositionLocation = gl.getAttribLocation(prog, "data");
+     
+    var texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture)
+
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+
+	var RESOLUTION = 100
+
+	var data = new ArrayBuffer(RESOLUTION*RESOLUTION);
+	var space2d = new Array(RESOLUTION)
+	for (i=0; i<RESOLUTION; i++)
+		space2d[i] = new Uint8Array(data, i*RESOLUTION)
+
+	// for(j=5; j<995; j++)
+	//  for (i=5; i<995; i++)
+	//   	space2d[i][j] = 50;
+
+	var maxc = -5	
+
+	var done = new Set();
+	function wet(x, y)
+	{
+		var qu = []
+		done.add(x*1000+y)
+        //This way of hashing results in collision for all points and their reflections along the diagonal
+        //axis, which resulted in an axis of symmetry, generating cool shapes.
+		space2d[y][x] = 255;
+		for(i=x-1; i<=x+1; i++)
+			for(j=y-1; j<=y+1; j++)
+				if (i < 100 && i >= 0 && j < 100 && j >= 0 && !done.has(i*1000+j) && Math.random() > 0.8)
+				{
+					space2d[i][j] = 255;
+					qu.push(j, i)
+				}
+		while (qu.length)
+			wet(qu.pop(), qu.pop())
+	}
+
+	wet(50, 50)
+	done.clear();
+
+
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.ALPHA, RESOLUTION, RESOLUTION, 0, gl.ALPHA, gl.UNSIGNED_BYTE, new Uint8Array(data));
+
+    // Create a buffer and put a single clipspace rectangle in
+    // it (2 triangles)
+    var buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+
+
+    gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array([
+            -1.0, -1.0,
+             1.0, -1.0,
+            -1.0,  1.0,
+            -1.0,  1.0,
+             1.0, -1.0,
+             1.0,  1.0]),
+        gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(positionLocation);
+    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+     
+    // draw
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+
+    </script>
+
+</html>

@@ -1,0 +1,19 @@
+Sprite texture data will be encoded and sent in this format:
+Each pixel is THREE bytes, as RGB maybe
+But, R represents a colour index. The colour palette will be sent as a uniform
+G will represent alpha
+and B will represent SUCEPTIBILITY.
+SUCEPTIBILITY will be split into 2 bit segments (hence 4 segments)
+
+Four "hues" will be uploaded as a uniform.
+The pixels will be transformed to show different hue variations, with the degree of transformation depending on
+the seceptibility segment (4 degrees of hue stengths).
+2 of the segments can be used for skin variations. Another for eye color, etc
+
+The original original plan was to keep skin overlay and eyes etc in the same category as equipment, so
+they move around "with" the main guy but have their own spritesheets
+But this will make things easier. Less number of sprites, and easier to draw too. The only variation was color anyway.
+Well things like eyes and hair actually may vary from character to character... hmm...
+
+I'll clarify once again: the third byte is being used as an alpha channel of sorts for an overlay effect of a hue given as a uniform.
+You can combine some segments when you need more detailed overlay. Skin can take 2 segments and have 8 degrees etc.
