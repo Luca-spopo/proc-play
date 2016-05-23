@@ -89,8 +89,8 @@
     var pending = []
 	function wet(x, y)
 	{
-		done.add(x*RESOLUTION+y)
-		
+	
+        done.add(x*RESOLUTION+y)	
         space2d[y][x] = 100;
         draw()
       
@@ -99,11 +99,12 @@
         var lef = 0
 		for(i=x-1; i<=x+1; i++)
 			for(j=y-1; j<=y+1; j++)
-				if (i<RESOLUTION&&i>=0&&j<RESOLUTION&&j>=0&& !done.has(i*RESOLUTION+j) && (x==i || y==j) && Math.random() < CHANCE)
+				if (i<RESOLUTION&&i>=0&&j<RESOLUTION&&j>=0&& !done.has(i*RESOLUTION+j)  && Math.random() < CHANCE)
     				{
                         lef++
                         pending.push(j, i)
                         space2d[j][i] = 255;
+                        done.add(i*RESOLUTION+j)
     				}
 
         if (lef > 4) console.log("IMPOSSIBLE!")
