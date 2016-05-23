@@ -72,7 +72,7 @@
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
 
-	var RESOLUTION = 100
+	var RESOLUTION = 200
 
 	var data = new ArrayBuffer(RESOLUTION*RESOLUTION);
 	var space2d = new Array(RESOLUTION)
@@ -89,14 +89,14 @@
 	function wet(x, y)
 	{
 		var qu = []
-		done.add(x*1000+y)
-        //This way of hashing results in collision for all points and their reflections along the diagonal
-        //axis, which resulted in an axis of symmetry, generating cool shapes.
+		done.add(x*RESOLUTION+y)
+        //No, the hash is not at fault
 		space2d[y][x] = 255;
 		for(i=x-1; i<=x+1; i++)
 			for(j=y-1; j<=y+1; j++)
-				if (i < 100 && i >= 0 && j < 100 && j >= 0 && !done.has(i*1000+j) && Math.random() > 0.8)
+				if (i < RESOLUTION && i >= 0 && j < RESOLUTION && j >= 0 && !done.has(i*RESOLUTION+j) && Math.random() > 0.77)
 				{
+                    //This is the place at fault, you forgot it's col major.
 					space2d[i][j] = 255;
 					qu.push(j, i)
 				}
@@ -104,7 +104,9 @@
 			wet(qu.pop(), qu.pop())
 	}
 
-	wet(50, 50)
+	wet(90, 90)
+    done.clear();
+    wet(110, 110)
 	done.clear();
 
 
