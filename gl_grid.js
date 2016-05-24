@@ -1,11 +1,13 @@
 function makegrid(RESOLUTION, R, G, B)
 {
+    //First some arcane hacking.
     if (R == Math.round(R))
         R += 0.001
     if (G == Math.round(G))
         G += 0.01
     if (B == Math.round(B))
         B += 0.01
+
     var fs_src = 
     `    	precision mediump float;
         	uniform sampler2D data;
