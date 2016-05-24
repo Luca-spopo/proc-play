@@ -1,5 +1,11 @@
-function makegrid(RESOLUTION)
+function makegrid(RESOLUTION, R, G, B)
 {
+    if (R == Math.round(R))
+        R += 0.001
+    if (G == Math.round(G))
+        G += 0.01
+    if (B == Math.round(B))
+        B += 0.01
     var fs_src = 
     `    	precision mediump float;
         	uniform sampler2D data;
@@ -7,9 +13,9 @@ function makegrid(RESOLUTION)
         	void main() {
         		float c = texture2D(data, (pos+1.0)/2.0 ).a;// + texture2D(data, pos).r + texture2D(data, pos).g + texture2D(data, pos).b;
         		//gl_FragColor = vec4(sin(c*1143.214), cos(c*2415.1414), c, c*255.0);
-                gl_FragColor = vec4(0, c, 0, 1);
-                if (c==0.0)
-                    gl_FragColor.r = 1.0;
+                gl_FragColor = vec4(c* ${R}/255.0, c* ${G}/255.0, c* ${B}/255.0, 1);
+                //if (c==0.0)
+                //    gl_FragColor.r = 1.0;
     		}`
     var vs_src =
     `    	precision mediump float;
