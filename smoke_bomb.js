@@ -25,9 +25,9 @@ var rani = function(x)
 	return Math.floor(ran()*x)
 }
 
-var LENGTHYNESS = 0.95
-var DEADENDS = 0.03
-var SPLITS = 0.033
+var LENGTHYNESS = 0.5
+var DEADENDS = 0.2
+var SPLITS = 0.3
 
 function rules(state)
 {
@@ -42,7 +42,7 @@ function rules(state)
 			5 = dead end
 			6 = 4-way
 		*/
-		case 0 : return function(c) //Wall
+		default : return function(c) //Wall
 		{	
 			if ( [1, 6].indexOf(c(-1, 0))>=0 )
 				if (ran() < LENGTHYNESS)
@@ -88,7 +88,6 @@ function rules(state)
 						return 5
 					else
 						return [1, 2, 4][rani(3)]
-			return c(0, 0)
 
 		}
 	}

@@ -1,12 +1,21 @@
 function makegrid(RESOLUTION, R, G, B)
 {
+    var rand = "//"
+    var color = ""
+
+    if (R===false)
+    {
+        rand = ""
+        color = "//"
+    }
+
     //First some arcane hacking.
     if (R == Math.round(R))
         R += 0.001
     if (G == Math.round(G))
-        G += 0.01
+        G += 0.001
     if (B == Math.round(B))
-        B += 0.01
+        B += 0.001
 
     var fs_src = 
     `    	precision mediump float;
@@ -14,11 +23,9 @@ function makegrid(RESOLUTION, R, G, B)
         	varying vec2 pos;
         	void main() {
         		float c = texture2D(data, (pos+1.0)/2.0 ).a;// + texture2D(data, pos).r + texture2D(data, pos).g + texture2D(data, pos).b;
-        		//gl_FragColor = vec4(sin(c*1143.214), cos(c*2415.1414), c, c*255.0);
-                gl_FragColor = vec4(c* ${R}/255.0, c* ${G}/255.0, c* ${B}/255.0, 1);
-                //if (c==0.0)
-                //    gl_FragColor.r = 1.0;
-    		}`
+        		${rand}gl_FragColor = vec4(sin(c*1143.214), cos(c*2415.1414), c/255.0, 1);
+                ${color}gl_FragColor = vec4(c* ${R}/255.0, c* ${G}/255.0, c* ${B}/255.0, 1);
+            }`
     var vs_src =
     `    	precision mediump float;
     		attribute vec2 a_position;
