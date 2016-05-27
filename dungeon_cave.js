@@ -1,4 +1,4 @@
-var RESOLUTION = 100
+var RESOLUTION = 300
 
 	var grid = makegrid(RESOLUTION, false)
 	var draw = grid[1]
@@ -19,20 +19,59 @@ function contextualize(arr, i, j)
 	}
 }
 
+Array.prototype.count = function()
+{
+	var count = 0
+	var args = []
+	for(var i = 0; i<arguments.length; i++)
+	{
+		args[i] = arguments[i]
+	}
+	for(i=0; i<this.length; i++)
+	{
+		if( args.indexOf(this[i])!=-1 )
+			count++
+	}
+	return count
+}
+
+Array.prototype.hasAny = function()
+{
+	var count = 0
+	for(var i=0; i<arguments.length; i++)
+	{
+		if (this.indexOf(arguments[i]) != -1)
+			return true
+	}
+	return false
+}
+
+var WALLYNESS = 0.35
+var TREASURENESS = 0.01
+var WALLYNESS_DECAY_COEFF = 0.998
+
+
 function rules(state)
 {
 	switch (state)
 	{
-		case 0 : return function(c)
+		case 0 :
+		return function(c)
 		{
-			if ([c(-1, 0), c(0, -1), c(0, 1),c(1, 0) /*, c(1, -1), c(-1, -1), c(-1, 1),c(1, 1)*/].indexOf(2) >= 0)
-				if (Math.random()>0.4)
-					return 2
+			if ([c(-1, 0), c(0, -1), c(0, 1),c(1, 0)].hasAny(10))
+				return 1
+
+			if ([c(-1, 0), c(0, -1), c(0, 1),c(1, 0)].hasAny(2))
+				if (WALLYNESS < Math.random() )
+						return 2
+				else if (Math.random() < TREASURENESS)
+					return 10 //treasure
 				else
 					return 1
 			else
-				return 0
+				return c(0, 0)
 		}
+	
 	}
 	return function(context) { return context(0, 0) } //Identity
 }
@@ -48,8 +87,16 @@ function next()
 			grid[i][j] = rules(buffer[i][j])(contextualize(buffer, i, j))
 		}
 	draw();
+	WALLYNESS = WALLYNESS/WALLYNESS_DECAY_COEFF
 }
 
-grid[20][20] = 2
+grid[150][150] = 2
+// var l
+// for (l=0; l<300; l++)
+// 	next()
 
-var inter = setInterval(next, 500)
+// //Sanitation:
+// for(l=0; l<RESOLUTION; l++)
+
+
+var inter = setInterval(next, 10)

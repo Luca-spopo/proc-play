@@ -23,7 +23,7 @@ function makegrid(RESOLUTION, R, G, B)
         	varying vec2 pos;
         	void main() {
         		float c = texture2D(data, (pos+1.0)/2.0 ).a;// + texture2D(data, pos).r + texture2D(data, pos).g + texture2D(data, pos).b;
-        		${rand}gl_FragColor = vec4(sin(c*1143.214), cos(c*2415.1414), c, 1);
+        		${rand}gl_FragColor = vec4(sin(c*1143.214), cos(c*2415.1414), c/255.0, 1);
                 ${color}gl_FragColor = vec4(c* ${R}/255.0, c* ${G}/255.0, c* ${B}/255.0, 1);
             }`
     var vs_src =
@@ -31,7 +31,7 @@ function makegrid(RESOLUTION, R, G, B)
     		attribute vec2 a_position;
      		varying vec2 pos;
     		void main() {
-    		  gl_Position = vec4(a_position.y, -a_position.x, 0, 1);
+    		  gl_Position = vec4(a_position, 0, 1);
     		  pos = a_position;
             }`
 
