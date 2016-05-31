@@ -1,169 +1,94 @@
-var RESOLUTION = 100
+var RESOLUTION = 1500
 
-	var grid = makegrid(RESOLUTION, false)
+	var grid = makegrid(RESOLUTION, 145, 149, 150)
 	var draw = grid[1]
 	grid = grid[0]
 
-var buffer = new Array(RESOLUTION)
+	function f(t) { return 6*Math.pow(t, 5) - 15*Math.pow(t, 4) + 10*Math.pow(t, 3) }
+
+	function dot(vec1, vec2)
+	{
+		return vec1[0]*vec2[0] + vec1[1] * vec2[1]
+	}
+	function mul(vec1, s)
+	{
+		return [vec1[0]*s, vec1[1]*s]
+	}
+	function add(vec1, vec2)
+	{
+		return [vec1[0]+vec2[0], vec1[1]+vec2[1]]
+	}
+
+	function interpolate(x, y, g00, g01, g10, g11, f) //f is easing function
+	{
+		return (
+		dot(g00, [x, y])* f( 1-x )
+		+
+		dot(g10, [x-1, y]) * f(x)
+		)*f( 1-y )
+		+
+		(
+		dot(g01, [x, y-1]) * f( 1-x )
+		+
+		dot(g11, [x-1, y-1]) * f(x)
+		)*f(y)
+	}
+function makePerlin(DENSITY_X, DENSITY_Y, AMPLITUDE, EASING)
+{
+
+	if (EASING == null)
+		EASING = f
+
+	DENSITY_X+=2;
+	DENSITY_Y+=2;
+
+	var pins = new Array(DENSITY_X)
+	for (i=0; i<DENSITY_X; i++)
+	{
+		var newarr = new Array(DENSITY_Y)
+		for (j=0; j<DENSITY_Y; j++)
+			newarr[j] = Math.floor(Math.random()*9)
+		pins[i] = newarr
+	}
+
+	var _ARROWS = [ [-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 0], [0, 1], [1, -1], [1, 0], [1, 1] ]
+	
+	function ret(x, y)
+	{
+		//Expects x and y to be in [0,1]
+		x *= DENSITY_X-2
+		y *= DENSITY_Y-2
+
+		//now x, y is within pins.
+		var i = Math.floor(x)
+		var j = Math.floor(y)
+
+		return AMPLITUDE*interpolate(x-i, y-j, 
+			_ARROWS[pins[i][j]] ,
+			_ARROWS[pins[i][j+1]] ,
+			_ARROWS[pins[i+1][j]] ,
+			_ARROWS[pins[i+1][j+1]], EASING )
+	}
+	return ret;
+
+
+}
+
+function poly3(a, b, c)
+{
+	return function(x)
+	{
+		return a*x*x*x + b*x*x + c*x
+	}
+}
+
+var p1 = makePerlin(16, 3, 60, (t) => {return Math.pow(t, 0.5)})
+var p2 = makePerlin(3, 80, 5)
+var p3 = makePerlin(3, 3, 0)
+
+
 for (i=0; i<RESOLUTION; i++)
-    buffer[i] = new Uint8Array(i*RESOLUTION)
-
-function contextualize(arr, i, j)
-{
-	return function(x, y)
-	{
-		x = (x+i+arr.length)%arr.length //Negative mods are a problem, hence the arbitrary add. Fix it to make a %%
-		y = (y+j+arr[x].length)%arr[x].length
-
-		return arr[x][y]
-	}
-}
-
-var ran = Math.random
-var rani = function(x)
-{
-	return Math.floor(ran()*x)
-}
-
-
-Array.prototype.count = function()
-{
-	var count = 0
-	var args = []
-	for(var i = 0; i<arguments.length; i++)
-	{
-		args[i] = arguments[i]
-	}
-	for(i=0; i<this.length; i++)
-	{
-		if( args.indexOf(this[i])!=-1 )
-			count++
-	}
-	return count
-}
-
-Array.prototype.hasAny = function()
-{
-	var count = 0
-	for(var i=0; i<arguments.length; i++)
-	{
-		if (this.indexOf(arguments[i]) != -1)
-			return true
-	}
-	return false
-}
-
-
-var LENGTHYNESS = 0.6
-var DEADENDS = 0.03
-var SPLITS = 0.23
-
-function rules(state)
-{
-	/*
-		0 = WALL
-		1 = going right
-		11 = going left
-		21 = going up
-		31 = going down
-		100 = dead end
-		201 = potential split, right gaurenteed
-		202 = potential split, left gaurenteed
-		203 = potential split, up gaurenteed
-		204 = potential split, down gaurenteed
-		250 = walkable, expired potential split
-	*/
-
-	if ( [201, 202, 203, 204].hasAny(state) )
-		return function() {return 250}
-
-	if( [0].hasAny( state ) )
-		return function(c, abs_x, abs_y)
-		{
-
-			if( [  c(0, 1), c(0, -1), c(1, 0), c(-1, 0)  ].count(0)==4 ) //No way to get here
-				return 0
-
-			function hpr(res)
-			{
-				if( (abs_x%2) + (abs_y%2) != 1 ) //NXOR operation
-					if(ran() < DEADENDS)
-						return 100
-					else
-						return res
-				else
-					if(ran() < LENGTHYNESS)
-						return res
-					else
-						switch( res )
-						{
-							case 1 : return [201, 204, 203][rani(3)]
-							case 11 : return [202, 204, 203][rani(3)]
-							case 21 : return [201, 202, 203][rani(3)]
-							case 31 : return [201, 204, 202][rani(3)]
-						}
-			}
-
-			if ( [c(-1, 0)].hasAny(1,201,202,203,204) )
-			{
-				if ( [1, 201].hasAny(c(-1, 0)) || ran() < SPLITS )
-					return hpr(1)
-			}
-			else if ( [c(1, 0)].hasAny(11,201,202,203,204) )
-			{
-				if ( [11, 202].hasAny(c(1, 0)) || ran() < SPLITS )
-					return hpr(11)
-			}
-			else if( [c(0, 1)].hasAny(21,201,202,203,204) )
-			{
-				if ( [21, 203].hasAny(c(0, 1)) || ran() < SPLITS )
-					return hpr(21)
-			}
-			else if( [c(0, -1)].hasAny(31,201,202,203,204) )
-			{
-				if ( [31, 204].hasAny(c(0, -1)) || ran() < SPLITS )
-					return hpr(31)
-			}
-			
-
-			// console.log("impossible")
-			return 0
-		}
-
-	return function(context) { return context(0, 0) } //Identity
-}
-
-var count = 0
-function next()
-{
-	for(i = 0; i<RESOLUTION; i++)
-		for(j = 0; j<RESOLUTION; j++)
-			buffer[i][j] = grid[i][j] //This is a snapshot of the current state, which will be used by the rules.
-	for(i=0; i<RESOLUTION; i++)
-		for(j=0; j<RESOLUTION; j++)
-		{
-			grid[i][j] = rules(buffer[i][j])(contextualize(buffer, i, j), i, j)
-		}
-	draw();
-	// console.log(count++)
-}
-
-grid[50][50] = [1, 11, 31, 21][rani(4)] //seed
-
-// for (k=0; k<200; k++)
-// 	next()
-
-// for(i=0; i<RESOLUTION; i++) //cleaning the results
-// 		for(j=0; j<RESOLUTION; j++)
-// 		{
-// 			if (grid[i][j] == 5)
-// 				grid[i][j] = 20
-// 			else if (grid[i][j] != 0)
-// 				grid[i][j] = 1;
-// 			else
-// 				grid[i][j] = 0
-
-// 		}
-// draw();
-
-var inter = setInterval(next, 10)
+	for(j=0; j<RESOLUTION; j++)
+		grid[i][j] = 125+p1(i/RESOLUTION, j/RESOLUTION) + Math.abs(p2(i/RESOLUTION, j/RESOLUTION)) + p3(i/RESOLUTION, j/RESOLUTION)
+//grid[i][j] = p1(i/RESOLUTION, j/RESOLUTION) + p2(i/RESOLUTION, j/RESOLUTION)
+draw();
