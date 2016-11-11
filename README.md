@@ -35,4 +35,4 @@ Particle Effects:
 
 Plain old Perlin noise:
 
-![samples/perlin_linear.png](samples/perlin_linear.png)
+![samples/perlin_linear.png](samples/perlin_linear.jpg)
