@@ -13,26 +13,26 @@ Want a peek?
 
 Level generation:
 
-![samples/cave.png](cave.png)
-![samples/catacombs2.png](catacombs2.png)
+![samples/cave.png](samples/cave.png)
+![samples/catacombs2.png](samples/catacombs2.png)
 
 Textures:
 
-![samples/cloth.png](cloth.png)
-![samples/steel.png](steel.png)
+![samples/cloth.png](samples/cloth.png)
+![samples/steel.png](samples/steel.png)
 
 Area Transitions:
 
-![samples/upscale.png](upscale.png)
-![samples/curvy.png](curvy.png)
-![samples/matte.png](matte.png)
+![samples/upscale.png](samples/upscale.png)
+![samples/curvy.png](samples/curvy.png)
+![samples/matte.png](samples/matte.png)
 
 Particle Effects:
 
-![samples/smoke1.png](smoke1.png)
-![samples/smoke2.png](smoke2.png)
-![samples/smoke3.png](smoke3.png)
+![samples/smoke1.png](samples/smoke1.png)
+![samples/smoke2.png](samples/smoke2.png)
+![samples/smoke3.png](samples/smoke3.png)
 
 Plain old Perlin noise:
 
-![samples/perlin_linear.png](perlin_linear.png)
+![samples/perlin_linear.png](samples/perlin_linear.png)
