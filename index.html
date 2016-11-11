@@ -1,0 +1,49 @@
+<html>
+	<body>
+	<table border="2">
+	<tr><td>Noise</td><td>
+		<a href="?Noise/a1.js">Bicubic 0-1 Perlin noise</a><br />
+		<a href="?Noise/perlin_noise.js">Linear Modulus Perlin noise</a><br />
+		<a href="?Noise/beach.js">Beach</a><br />
+		<a href="?Noise/metal.js">Steel shutter</a><br />
+		<a href="?Noise/cloth.js">Cloth</a><br />
+	    <a href="?Noise/bicubic_perlin.js">Tiled smudge</a><br />
+		<a href="?Noise/matte.js">Tiled smudge (matte)</a><br />
+	</td>
+	<td>CA</td><td>
+		<a href="?CA/catacombs_v0.js">Catacombs v0</a><br />
+		<a href="?CA/sewers.js">Sewers</a><br />
+		<a href="?CA/smoke_bomb.js">Smoke</a><br />
+		<a href="?CA/catacomb_v2_failed.js">Catacombs v2</a><br />
+		<a href="?CA/dungeon_cave.js">Cave</a><br />
+		<a href="?CA/naive_ruins.js">Ruins</a><br />
+	</td>
+	<td>Misc</td><td>
+		<a href="?biome_mixer.js">Tiled smudge (Upscaling)</a><br />
+		<a href="?L-Systems/L-system.js">Test (L-Systems)</a><br />
+	</td>
+	</tr>
+	</table>
+	<canvas id="canvas" width="300" height="300"> </canvas>
+	<div id="commentDiv"></div>
+	    <script type="text/javascript" src="gl_grid.js"></script>
+	    <!--script type="text/javascript" src="perlin_noise.js"></script -->
+	    <script>
+	    if(window.location.search.substr(1))
+	    {
+		    var js = document.createElement('script');
+			js.setAttribute('type', 'text/javascript');
+			js.src = window.location.search.substr(1);
+			document.body.appendChild(js);
+			js.onload = function() {
+				if (window.comment == null) window.comment = ""
+				document.getElementById("commentDiv").innerHTML = window.comment.replace(/\n/g, "<br />")
+			}
+		}
+		else
+		{
+			document.write = "No file in URL fragment"
+		}
+	    </script>
+    </body>
+</html>

@@ -1,3 +1,10 @@
+comment = 
+`
+A simple proof of concept I made while dabbling into L-Systems.
+It's supposed to create different kind of noses, but I didnt make decent rules
+or initial axiom to get a nice result.
+`
+
 var RESOLUTION = 100
 
 	var grid = makegrid(RESOLUTION, 255*255, 255*255, 255*255)
@@ -95,22 +102,23 @@ function rules(c)
 	switch (c(0))
 	{
 		case 1 :
-			return pick([1, 1], 0.66,
+			return [[1, 1], [1]][rani(2)]
+						/*pick([1, 1], 0.66,
 						[1, 1, 2], 1
-						)
-		case 2 :
-			return pick(
+						)*/
+		case 2 : 
+			return [[2, 2, 2], [2]][rani(2)]/*pick(
 						[2, 2], 0.3,
 						[2, 1], 1
-						)
-		case 3 :
-			return pick(
+						)*/
+		case 3 : 
+			return [[3, 3, 3], [3]][rani(2)]/*pick(
 						[3, 3], 0.3,
 						[3], 0.6
 						[3, 4], 1
-						)
+						)*/
 		case 4 :
-			return 		[4, 4]
+			return  [[4, 4, 4, 4], [4, 4]][rani(2)]		//[4, 4]
 						
 
 	}
@@ -167,12 +175,14 @@ function next()
 
 axiom = [1, 2, 3, 4]
 
-document.getElementById("canvas").onmousedown = function()
-{
-	next()
-}
+for(var i=0; i<17; i++) next();
 
-draw()
+// document.getElementById("canvas").onmousedown = function()
+// {
+// 	next()
+// }
+
+// draw()
 
 
 // for (k=0; k<200; k++)

@@ -1,3 +1,9 @@
+comment = `
+Let the thing generate everything, after which it cleans the colours.
+Generates a random catacomb map
+Passages are black, treasure chests are golden
+`
+
 var RESOLUTION = 100
 
 	var grid = makegrid(RESOLUTION, false)
@@ -96,6 +102,7 @@ function rules(state)
 var count = 0
 function next()
 {
+	console.log("nexting")
 	for(i = 0; i<RESOLUTION; i++)
 		for(j = 0; j<RESOLUTION; j++)
 			buffer[i][j] = grid[i][j] //This is a snapshot of the current state, which will be used by the rules.
@@ -104,16 +111,9 @@ function next()
 		{
 			grid[i][j] = rules(buffer[i][j])(contextualize(buffer, i, j))
 		}
-	draw();
-	console.log(count++)
-}
-
-grid[50][50] = [1, 2, 3, 4][rani(4)] //seed
-
-for (k=0; k<200; k++)
-	next()
-
-for(i=0; i<RESOLUTION; i++) //cleaning the results
+	if (count++>170){
+		clearInterval(inter);
+		for(i=0; i<RESOLUTION; i++) //cleaning the results
 		for(j=0; j<RESOLUTION; j++)
 		{
 			if (grid[i][j] == 5)
@@ -124,6 +124,13 @@ for(i=0; i<RESOLUTION; i++) //cleaning the results
 				grid[i][j] = 0
 
 		}
-draw();
+	}
+	draw();
+}
 
-//var inter = setInterval(next, 100)
+grid[50][50] = [1, 2, 3, 4][rani(4)] //seed
+
+// for (k=0; k<200; k++)
+// 	next()
+
+inter = setInterval(next, 10)

@@ -1,3 +1,11 @@
+comment =
+`
+Takes an inital small tiled map, and keeps upscaling it while randomly swapping neighbours.
+The chances of swapping increase with every iteration,
+hence powdery smudge is common, but chances of massive displacements are low.
+This would be an excellent way to mix certain biomes in minecraft.
+`
+
 var RESOLUTION = 1280
 
 	var grid = makegrid(RESOLUTION, false) //50*20, 130*20, 170*20

@@ -1,3 +1,7 @@
+comment = 
+`This one looks like a steel shutter.`
+
+
 var RESOLUTION = 1500
 
 	var grid = makegrid(RESOLUTION, 145, 149, 150)

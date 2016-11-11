@@ -1,4 +1,9 @@
-var RESOLUTION = 300
+comment = `
+Generates a rocky cave/dungeon. I like this.
+Yellow dots are treasure chests, walls are black.
+`
+
+var RESOLUTION = 100
 
 	var grid = makegrid(RESOLUTION, false)
 	var draw = grid[1]
@@ -90,7 +95,7 @@ function next()
 	WALLYNESS = WALLYNESS/WALLYNESS_DECAY_COEFF
 }
 
-grid[150][150] = 2
+grid[50][50] = 2
 // var l
 // for (l=0; l<300; l++)
 // 	next()

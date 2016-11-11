@@ -1,3 +1,11 @@
+/*
+Makes a RESOLUTION*RESOLUTION byte buffer, sets up WebGL to render a square grid to the canvas
+using this buffer as data. Returns a convinient 2D viewer array to address elements of this grid, and a
+draw function that actually draws to the canvas using WebGL.
+Since each square on the grid can only have one byte of data, colours can either be random for
+each number, or, if RGB are given, they are that RGB multiplied by the number / 255
+*/
+
 function makegrid(RESOLUTION, R, G, B)
 {
     var rand = "//"

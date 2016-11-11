@@ -1,6 +1,8 @@
-var RESOLUTION = 1500
+comment = `This one looks like a sea shore, maybe`
 
-	var grid = makegrid(RESOLUTION, 145, 149, 150)
+var RESOLUTION = 1600
+
+	var grid = makegrid(RESOLUTION, 180*1.1, 1.1*140, 1.1*160)
 	var draw = grid[1]
 	grid = grid[0]
 
@@ -43,19 +45,27 @@ function makePerlin(DENSITY_X, DENSITY_Y, AMPLITUDE, EASING)
 	DENSITY_Y+=2;
 
 	var pins = new Array(DENSITY_X)
-	for (i=0; i<DENSITY_X; i++)
+	for (i=1; i<DENSITY_X; i++)
 	{
 		var newarr = new Array(DENSITY_Y)
-		for (j=0; j<DENSITY_Y; j++)
+		for (j=1; j<DENSITY_Y; j++)
 			newarr[j] = Math.floor(Math.random()*9)
+		newarr[0] = newarr[DENSITY_Y-1] //Making it tilable
 		pins[i] = newarr
 	}
+	pins[0] = pins[DENSITY_X-1] //Making it tilable
 
 	var _ARROWS = [ [-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 0], [0, 1], [1, -1], [1, 0], [1, 1] ]
 	
 	function ret(x, y)
 	{
 		//Expects x and y to be in [0,1]
+
+		if (x>1 || x<0)
+			x = x - Math.floor(x)
+		if (y>1 || y<0)
+			y = y - Math.floor(y)
+
 		x *= DENSITY_X-2
 		y *= DENSITY_Y-2
 
@@ -82,13 +92,16 @@ function poly3(a, b, c)
 	}
 }
 
-var p1 = makePerlin(16, 3, 60, (t) => {return Math.pow(t, 0.5)})
-var p2 = makePerlin(3, 80, 5)
-var p3 = makePerlin(3, 3, 0)
-
+var p1 = makePerlin(16, 2, 100, (t) => {return t*t})
+var p4 = makePerlin(400, 100, 3)
+var p2 = makePerlin(2, 16, RESOLUTION/100)
+var p3 = makePerlin(4, 4, RESOLUTION/20)
 
 for (i=0; i<RESOLUTION; i++)
 	for(j=0; j<RESOLUTION; j++)
-		grid[i][j] = 125+p1(i/RESOLUTION, j/RESOLUTION) + Math.abs(p2(i/RESOLUTION, j/RESOLUTION)) + p3(i/RESOLUTION, j/RESOLUTION)
+	{
+		var offs = p2(i/RESOLUTION, j/RESOLUTION) + p3(i/RESOLUTION, j/RESOLUTION)
+		grid[i][j] = 127 + p4((i)/RESOLUTION, (j)/RESOLUTION) + p1((i+offs)/RESOLUTION, (j)/RESOLUTION) // + Math.abs(p2(i/RESOLUTION, j/RESOLUTION)) + p3(i/RESOLUTION, j/RESOLUTION)
+	}
 //grid[i][j] = p1(i/RESOLUTION, j/RESOLUTION) + p2(i/RESOLUTION, j/RESOLUTION)
 draw();

@@ -1,3 +1,7 @@
+comment = `
+Creates a sewer system with lots of narrow turns
+`
+
 var RESOLUTION = 100
 
 	var grid = makegrid(RESOLUTION, false)

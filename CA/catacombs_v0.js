@@ -1,3 +1,7 @@
+comment = `
+Generates a random catacomb map
+`
+
 var RESOLUTION = 100
 
 	var grid = makegrid(RESOLUTION, 255*255, 255*255, 255*255)
@@ -124,4 +128,4 @@ grid[50][50] = [1, 2, 3, 4][rani(4)]
 // 		}
 // draw();
 
-var inter = setInterval(next, 100)
+var inter = setInterval(next, 10)

@@ -1,3 +1,9 @@
+comment = 
+`This one makes tilable noise, so that there are no discontinuous edges if you attempt
+to tile the given noise function.
+
+I'm not sure I completed this`
+
 var RESOLUTION = 1600
 
 	var grid = makegrid(RESOLUTION, 180*1.1, 1.1*140, 1.1*160)
@@ -21,6 +27,7 @@ var RESOLUTION = 1600
 
 	function interpolate(x, y, g00, g01, g10, g11, f) //f is easing function
 	{
+		console.log(g00, g01, g10, g11)
 		return (
 		dot(g00, [x, y])* f( 1-x )
 		+
@@ -90,16 +97,20 @@ function poly3(a, b, c)
 	}
 }
 
-var p1 = makePerlin(16, 2, 100, (t) => {return t*t})
-var p4 = makePerlin(400, 100, 3)
-var p2 = makePerlin(2, 16, RESOLUTION/100)
-var p3 = makePerlin(4, 4, RESOLUTION/20)
+var p1 = makePerlin(3, 3, 800)
 
-for (i=0; i<RESOLUTION; i++)
-	for(j=0; j<RESOLUTION; j++)
-	{
-		var offs = p2(i/RESOLUTION, j/RESOLUTION) + p3(i/RESOLUTION, j/RESOLUTION)
-		grid[i][j] = 127 + p4((i)/RESOLUTION, (j)/RESOLUTION) + p1((i+offs)/RESOLUTION, (j)/RESOLUTION) // + Math.abs(p2(i/RESOLUTION, j/RESOLUTION)) + p3(i/RESOLUTION, j/RESOLUTION)
-	}
+p1(0.9, 0.1)
+p1(0.1, 0.9)
+p1(0.9, 1.1)
+
+// var p4 = makePerlin(400, 100, 3)
+// var p2 = makePerlin(2, 16, RESOLUTION/100)
+// var p3 = makePerlin(4, 4, RESOLUTION/20)
+
+// for (i=0; i<RESOLUTION; i++)
+// 	for(j=0; j<RESOLUTION; j++)
+// 	{
+// 		grid[i][j] = 127 + p1(i/RESOLUTION*2, j/RESOLUTION*2) // + Math.abs(p2(i/RESOLUTION, j/RESOLUTION)) + p3(i/RESOLUTION, j/RESOLUTION)
+// 	}
 //grid[i][j] = p1(i/RESOLUTION, j/RESOLUTION) + p2(i/RESOLUTION, j/RESOLUTION)
 draw();

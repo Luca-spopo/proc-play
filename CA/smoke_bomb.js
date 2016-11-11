@@ -1,3 +1,8 @@
+comment = `
+Creates an expanding smoke particle effect.
+You may have to refresh a few times if the initial particle dies to early
+`
+
 var RESOLUTION = 100
 
 	var grid = makegrid(RESOLUTION, 255*255, 255*255, 255*255)

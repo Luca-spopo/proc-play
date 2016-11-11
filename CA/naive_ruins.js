@@ -1,3 +1,7 @@
+comment = `
+Creates a ruined monastary or something. I used a new and crazy approach to make this.
+Results are mixed.`
+
 var RESOLUTION = 100
 
 	var grid = makegrid(RESOLUTION, false)
@@ -79,6 +83,8 @@ function rules(state)
 	return function(context) { return context(0, 0) } //Identity
 }
 
+count = 0
+
 function next()
 {
 	for(i = 0; i<RESOLUTION; i++)
@@ -89,14 +95,20 @@ function next()
 		{
 			grid[i][j] = rules(buffer[i][j])(contextualize(buffer, i, j))
 		}
+	if(count++ > 300)
+	{
+		clearInterval(inter)
+		clean()
+	}
 	draw();
 }
 
 //grid[20][20] = 2
-for (k=0; k<300; k++)
-	next();
+// for (k=0; k<300; k++)
+// 	next();
 
-
+function clean()
+{
 for(i=0; i<RESOLUTION; i++) //cleaning the results
 		for(j=0; j<RESOLUTION; j++)
 		{
@@ -106,6 +118,6 @@ for(i=0; i<RESOLUTION; i++) //cleaning the results
 				grid[i][j] = 0
 
 		}
-	draw();
+}
 
-//var inter = setInterval(next, 500)
+inter = setInterval(next, 10)
