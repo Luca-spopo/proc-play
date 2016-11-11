@@ -7,7 +7,7 @@ Procedural generation of maps, textures, particle effects, and apparantly noses.
 Uses noise functions (especially Perlin noise), Cellular Automata, Graph traverals (Random BFS) and L-Systems (A little).
 Also uses upscaling, which doesn't really have a name I guess. Maybe I invented it.
 
-[See it in action](luca-spopo.github.io/proc-play)
+[See it in action](http://luca-spopo.github.io/proc-play/)
 
 Want a peek?
 
