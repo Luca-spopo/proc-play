@@ -1,5 +1,23 @@
 comment = `
-Look at it go
+function next(a, b)
+{
+ if (a > b && a > -b)
+ {
+  b++
+ }
+ else if(a < b && -a>=b )
+ {
+  b--
+ }
+ else
+ {
+  if(b > 0)
+   a--
+  else
+   a++
+ }
+return a, b
+}
 `
 
 var RESOLUTION = 20
