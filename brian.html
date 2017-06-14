@@ -1,0 +1,33 @@
+<html>
+	<body>
+	<table border="2">
+	<tr>
+	<td>Brian</td><td>
+		<a href="?brian.js">Brian equation</a><br />
+		<a href="?brian2.js">Brain locus</a><br />
+	</td>
+	</tr>
+	</table>
+	<canvas id="canvas" width="300" height="300"> </canvas>
+	<div id="commentDiv"></div>
+	    <script type="text/javascript" src="gl_grid.js"></script>
+	    <!--script type="text/javascript" src="perlin_noise.js"></script -->
+	    <script>
+	    if(window.location.search.substr(1))
+	    {
+		    var js = document.createElement('script');
+			js.setAttribute('type', 'text/javascript');
+			js.src = window.location.search.substr(1);
+			document.body.appendChild(js);
+			js.onload = function() {
+				if (window.comment == null) window.comment = ""
+				document.getElementById("commentDiv").innerHTML = window.comment.replace(/\n/g, "<br />")
+			}
+		}
+		else
+		{
+			document.write = "No file in URL fragment"
+		}
+	    </script>
+    </body>
+</html>
