@@ -15,7 +15,10 @@ Level generation:
 
 ![samples/cave.png](samples/cave.png)
 ![samples/catacombs2.png](samples/catacombs2.png)
-
+![samples/smooth.png](samples/smooth.png)
+![samples/valley.png](samples/valley.png)
+![samples/concentric.png](samples/concentric.png)
+![samples/concentric2.png](samples/concentric2.png)
 Textures:
 
 ![samples/cloth.png](samples/cloth.png)
@@ -36,3 +39,9 @@ Particle Effects:
 Plain old Perlin noise:
 
 ![samples/perlin_linear.png](samples/perlin_linear.jpg)
+
+Golem sprites:
+![samples/golem1.png](samples/golem1.jpg)
+![samples/golem2.png](samples/golem2.jpg)
+![samples/golem3.png](samples/golem3.jpg)
+![samples/golem4.png](samples/golem4.jpg)
