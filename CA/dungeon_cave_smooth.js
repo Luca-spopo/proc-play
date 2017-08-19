@@ -52,7 +52,7 @@ Array.prototype.hasAny = function()
 
 var ran = Math.random
 
-var WALLYNESS = 0.30
+var WALLYNESS = 0.25
 var TREASURENESS = 0.01
 var WALLYNESS_DECAY_COEFF = Math.pow((0.998), 1/3)
 
@@ -80,7 +80,7 @@ function rules(state, c)
 	return state //Identity
 }
 
-var KERNEL = 1
+var KERNEL = 2
 var smooth_passes = 1
 function smoothrules(state, c) {
 	//return function(c, abx, aby) {
@@ -101,7 +101,7 @@ function smoothrules(state, c) {
 var count = 0
 function next(ruless)
 {
-	if((count++) % 10 == 9) {
+	if((count++) % 13 == 12) {
 		ruless = smoothrules
 		WALLYNESS = WALLYNESS*WALLYNESS_DECAY_COEFF
 	}
