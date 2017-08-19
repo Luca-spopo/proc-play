@@ -25,37 +25,37 @@ function contextualize(arr, i, j)
 
 function is1(t)
 {
-	return t==1 || t==6 || t==7 || t==8
+	return t==0 || t==6 || t==7 || t==8
 }
 
 function rules(state)
 {
 	switch (state)
 	{
-		case 0 : return function(c)
+		case 1 : return function(c)
 		{	
 			if ( [c(-2, 0), c(-1, 0), c(-3, 0)].every(is1) 
 			|| [c(2, 0), c(1, 0), c(3, 0)].every(is1) 
 			|| [c(0, 1), c(0, 2), c(0, 3)].every(is1) 
 			|| [c(0, -1), c(0, -2), c(0, -3)].every(is1) )
 				if (Math.random()>0.3)
-					return 1
+					return 0
 				else
 					return 5
 			else
 				if (Math.random() > 0.98)
 					return 6
 				else
-					return 0
+					return 1
 		}
-		case 1 : 
+		case 0 : 
 		case 6 : return function(c)
 		{
 			if ( [c(-2, 0), c(-1, 0), c(-3, 0)].every(is1) 
 			|| [c(2, 0), c(1, 0), c(3, 0)].every(is1) 
 			|| [c(0, 1), c(0, 2), c(0, 3)].every(is1) 
 			|| [c(0, -1), c(0, -2), c(0, -3)].every(is1) )
-				return 1
+				return 0
 			else
 				return 7
 		}
@@ -65,7 +65,7 @@ function rules(state)
 			|| [c(2, 0), c(1, 0), c(3, 0)].every(is1) 
 			|| [c(0, 1), c(0, 2), c(0, 3)].every(is1) 
 			|| [c(0, -1), c(0, -2), c(0, -3)].every(is1) )
-				return 1
+				return 0
 			else
 				return 8
 		}
@@ -75,9 +75,9 @@ function rules(state)
 			|| [c(2, 0), c(1, 0), c(3, 0)].every(is1) 
 			|| [c(0, 1), c(0, 2), c(0, 3)].every(is1) 
 			|| [c(0, -1), c(0, -2), c(0, -3)].every(is1) )
-				return 1
-			else
 				return 0
+			else
+				return 1
 		}
 	}
 	return function(context) { return context(0, 0) } //Identity
@@ -112,12 +112,15 @@ function clean()
 for(i=0; i<RESOLUTION; i++) //cleaning the results
 		for(j=0; j<RESOLUTION; j++)
 		{
-			if (grid[i][j] != 1)
+			if (grid[i][j] != 0)
 				grid[i][j] = 1;
 			else
 				grid[i][j] = 0
 
 		}
 }
+for(i=0; i<RESOLUTION; i++) //cleaning the results
+		for(j=0; j<RESOLUTION; j++)
+			grid[i][j] = 1
 
 inter = setInterval(next, 10)

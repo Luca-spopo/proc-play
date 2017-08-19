@@ -168,18 +168,18 @@ for(i=0; i<RESOLUTION; i++) //cleaning the results
 			kek = 1
 			if (a > b && a > -b)
 			{
-				kek = 19
+				kek = 50 //navy blue
 			}
 			else if(a < b && -a>=b )
 			{
-				kek = 3
+				kek = 3 //red
 			}
 			else
 			{
 				if(b > 0)
-					kek = 8
+					kek = 8 //green
 				else
-					kek = 6
+					kek = 6 //yellow
 			}
 			grid[i][j] = kek
 

@@ -158,7 +158,7 @@ function rules(state)
 var count = 0
 function next()
 {
-	grid[mainx][mainy] = 3
+	grid[mainx][mainy] = 30
 	a = mainx-RESOLUTION/2
 	b = mainy-RESOLUTION/2
 	kek = 1
@@ -177,7 +177,7 @@ function next()
 		else
 			mainx++
 	}
-	grid[mainx][mainy] = 4
+	grid[mainx][mainy] = 90
 	draw();
 	// console.log(count++)
 }
@@ -190,10 +190,29 @@ function next()
 for(i=0; i<RESOLUTION; i++) //cleaning the results
 		for(j=0; j<RESOLUTION; j++)
 		{
-			
-			grid[i][j] = 1
+			a = i-RESOLUTION/2
+			b = j-RESOLUTION/2
+			kek = 1
+			if (a > b && a > -b)
+			{
+				kek = 50 //navy blue
+			}
+			else if(a < b && -a>=b )
+			{
+				kek = 3 //red
+			}
+			else
+			{
+				if(b > 0)
+					kek = 8 //green
+				else
+					kek = 6 //yellow
+			}
+			grid[i][j] = kek
 
 		}
+//grid[RESOLUTION/2][RESOLUTION/2] = 1
+draw();
 //grid[RESOLUTION/2][RESOLUTION/2] = 1
 
 mainx = RESOLUTION/2
