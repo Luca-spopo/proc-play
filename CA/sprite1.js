@@ -58,11 +58,11 @@ Array.prototype.hasAny = function()
 }
 
 var KERNEL = 1
-var probby = 0.7
+var probby = 0.75
 var neighbourThres = function(set, total) {
-	return set/total > 0.5
+	return set/total > 0.6
 }
-var smooth_passes = 1
+var smooth_passes = 10
 
 function main_rules(state)
 {
@@ -112,17 +112,19 @@ function next(rules)
 }
 
 grid[49][30] = 55 //head
-grid[49][40] = 55 //head2
-grid[40][54] = 52 //chest
-grid[28][44] = 55 //shoulders
-grid[25][50] = 58 //arms
-grid[21][55] = 60 //arms
-grid[21][60] = 60 //arms
+grid[49][40] = 58 //head2
+grid[40][54] = 55 //chest
+grid[28][44] = 57 //shoulders
+grid[39][44] = 60 //nape
+grid[25][50] = 60 //arms
+grid[21][55] = 62 //arms
+grid[21][60] = 62 //arms
 grid[21][65] = 55 //hands
-grid[45][75] = 54 //lowbody
+grid[45][75] = 54 //crotch
+grid[45][65] = 56 //abs
 grid[40][80] = 60 //legs
 grid[38][90] = 60 //legs
-grid[34][97] = 60 //legs
+grid[34][97] = 57 //legs
 
 
 for (k=0; k<20; k++)
