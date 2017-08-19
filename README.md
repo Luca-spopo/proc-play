@@ -40,10 +40,10 @@ Particle Effects:
 
 Plain old Perlin noise:
 
-![samples/perlin_linear.png](samples/perlin_linear.jpg)
+![samples/perlin_linear.png](samples/perlin_linear.png)
 
 Golem sprites:
-![samples/golem1.png](samples/golem1.jpg)
-![samples/golem2.png](samples/golem2.jpg)
-![samples/golem3.png](samples/golem3.jpg)
-![samples/golem4.png](samples/golem4.jpg)
+![samples/golem1.png](samples/golem1.png)
+![samples/golem2.png](samples/golem2.png)
+![samples/golem3.png](samples/golem3.png)
+![samples/golem4.png](samples/golem4.png)
