@@ -59,13 +59,19 @@ var WALLYNESS_DECAY_COEFF = Math.pow((0.998), 1/3)
 
 function rules(state, c)
 {
+	var a = c(-1, 0)
+	var b = c(0, -1)
+	var c2 = c(0, 1)
+	var d = c(1, 0)
+	//1,2 = wall
+	//4,6 = walkable
 	if (state == 0) {
-		if (c(-1, 0) == 10 ||  c(0, -1) == 10 || c(0, 1) == 10 || c(1, 0) == 10)
-			return 1
+		// if (a == 10 ||  b == 10 || c == 10 || d == 10)
+		// 	return 1
 
-		if (c(-1, 0) == 2 || c(0, -1) == 2 || c(0, 1) == 2 || c(1, 0) == 2)
+		if (a == 6 || b == 6 || c2 == 6 || d == 6 || a == 4 || b == 4 || c2 == 4 || d == 4)
 			if (WALLYNESS < ran() )
-					return 2
+					return 4
 			else
 				return 1
 		else
@@ -76,24 +82,26 @@ function rules(state, c)
 
 var KERNEL = 1
 var smooth_passes = 1
-smoothrules = function(state, c) {
+function smoothrules(state, c) {
 	//return function(c, abx, aby) {
 		if (state==0) return 0
+		if (state == 6 || state == 2)
+			return state
 		var temp = 0
 		for(var i=-KERNEL; i<=KERNEL; i++)
 			for(var j=-KERNEL; j<=KERNEL; j++)
-				if(c(i, j) == 2 || c(i, j) == 4)
+				if(c(i, j) == 4 || c(i, j) == 6)
 					temp++
 		if(temp > 0.5*(KERNEL*2+1)*(KERNEL*2+1))
-			return 2
+			return 6
 		else
-			return 1			//}
+			return 2			//}
 }
 
 var count = 0
 function next(ruless)
 {
-	if((count++) % 30 > 27) {
+	if((count++) % 10 == 9) {
 		ruless = smoothrules
 		WALLYNESS = WALLYNESS*WALLYNESS_DECAY_COEFF
 	}
@@ -110,7 +118,11 @@ function next(ruless)
 	draw();
 }
 
-grid[RESOLUTION/2][RESOLUTION/2] = 2
+// for(var i=0; i<RESOLUTION; i++)
+// 	for(var j=0; j<RESOLUTION; j++)
+// 		grid[i][j] = 0
+
+grid[RESOLUTION/2][RESOLUTION/2] = 4
 var l
 // for (l=0; l<350; l++)
 // 	next(rules)
