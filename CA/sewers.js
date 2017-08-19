@@ -170,4 +170,4 @@ grid[50][50] = [1, 11, 31, 21][rani(4)] //seed
 // 		}
 // draw();
 
-var inter = setInterval(next, 1000)
+var inter = setInterval(next, 10)
