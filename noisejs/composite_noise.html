@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<title>Perlin noise</title>
+<style>
+.centerbox {
+  /* flexbox, por favor */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-pack: center;
+  -webkit-box-align: center;
+
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-pack: center;
+  -moz-box-align: center;
+
+  width: 100%;
+  height: 100%;
+  margin: 0; padding: 0;
+}
+body, html { width: fit-content; height: fit-content; padding: 0; margin: 0; }
+canvas {
+  /* border-radius: 30px;  Border radiuses don't seem to work with putImageData */
+  box-shadow: 0 0 10px #777;
+}
+body {
+  background-color: #eee;
+}
+</style>
+<div class='centerbox'><canvas></canvas></div>
+<script src='perlin.js'></script>
+<script>
+var canvas = document.getElementsByTagName('canvas')[0];
+canvas.width = 6000;
+canvas.height = 700;
+
+var ctx = canvas.getContext('2d');
+
+var image = ctx.createImageData(canvas.width, canvas.height);
+var data = image.data;
+
+noise.seed(Math.random());
+
+var start = Date.now();
+
+for (var x = 0; x < canvas.width; x++) {
+  for (var y = 0; y < canvas.height; y++) {
+    var cell = (x + y * canvas.width) * 4;
+    data[cell] = data[cell + 2] = 0; //R, B
+    data[cell + 1] = 0; //G
+    data[cell + 3] = 255; // alpha.
+  }
+}
+
+var xp = 0
+let pow = Math.pow
+let sin = Math.sin
+let cos = Math.cos
+let PI = Math.PI
+for (var x = 0; x < canvas.width; x++) {
+  let mapping_scale = noise.simplex2(1000+x*0.01, 1000)
+  xp += Math.abs(mapping_scale)
+  var mapped_value = noise.simplex2(xp*0.03, 0)*0.5 + 0.5;
+  // mapped_value += noise.simplex2(x*0.03*(xp/canvas.width), 0)*0.5 + 0.5
+  // mapped_value = mapped_value/2
+  mapped_value = 1 - cos((mapped_value * PI) / 2); //easing
+  mapped_value *= 100
+  mapped_value = Math.floor(mapped_value)
+  if (xp %10 < 5) {
+    FULLC = 230
+  }
+  else {
+    FULLC = 200
+  }
+  for(j=mapped_value+30; j>0; j--) {
+    var cell = (x + j * canvas.width) * 4;
+    data[cell] = data[cell + 2] = 255; //R, B
+    data[cell + 1] = FULLC; //G
+    data[cell + 3] = 255; // alpha.
+  }
+}
+
+for (var x = 0; x <= canvas.width; x++) {
+  var mapped_value = noise.simplex2(x*0.03*(xp/canvas.width), 0)*0.5 + 0.5;
+  mapped_value = 1 - cos((mapped_value * PI) / 2); //easing
+  mapped_value *= 100
+  mapped_value = Math.floor(mapped_value)
+
+  for(j=mapped_value+200; j>170; j--) {
+    var cell = (x + j * canvas.width) * 4;
+    data[cell] = data[cell + 2] = 255; //R, B
+    data[cell + 1] = 255; //G
+    data[cell + 3] = 255; // alpha.
+  }
+}
+
+for (var x = 0; x <= canvas.width; x++) {
+  var mapped_value = noise.simplex2(x*0.03*(xp/canvas.width), 0)*0.5 + 0.5;
+
+  mapped_value *= 100
+  mapped_value = Math.floor(mapped_value)
+
+  for(j=mapped_value+400; j>300; j--) {
+    var cell = (x + j * canvas.width) * 4;
+    data[cell] = data[cell + 2] = 0; //R, B
+    data[cell + 1] = 0; //G
+    data[cell + 3] = 0; // alpha.
+  }
+}
+
+
+
+var end = Date.now();
+
+ctx.fillColor = 'black';
+ctx.fillRect(0, 0, 100, 100);
+ctx.putImageData(image, 0, 0);
+
+
+ctx.font = '16px sans-serif'
+ctx.textAlign = 'center';
+ctx.fillText('Rendered in ' + (end - start) + ' ms', canvas.width / 2, canvas.height - 20);
+
+if(console) {
+  console.log('Rendered in ' + (end - start) + ' ms');
+}
+</script>
